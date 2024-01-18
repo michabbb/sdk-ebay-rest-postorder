@@ -42,7 +42,7 @@ use macropage\SDKs\ebay\rest\postorder\Model\ModelInterface;
 class ObjectSerializer
 {
     /** @var string */
-    private static $dateTimeFormat = \DateTime::ATOM;
+    private static $dateTimeFormat = 'Y-m-d\TH:i:s.v\Z';
 
     /**
      * Change the date format
@@ -402,9 +402,6 @@ class ObjectSerializer
      */
     public static function deserialize($data, $class, $httpHeaders = null)
     {
-        echo "\n\n".print_r($class,true)."\n\n";
-
-
         if (null === $data) {
             return null;
         }
@@ -498,9 +495,6 @@ class ObjectSerializer
             settype($data, $class);
             return $data;
         }
-
-        print_r($class)."\n\n";
-
 
         if (method_exists($class, 'getAllowableEnumValues')) {
             if (!in_array($data, $class::getAllowableEnumValues(), true)) {
