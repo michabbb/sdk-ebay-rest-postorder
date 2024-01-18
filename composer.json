@@ -1,6 +1,5 @@
 {
     "name": "macropage/sdk-ebay-rest-postorder",
-    "version": "1.9.0",
     "description": "API for searching eBay order cancellations.",
     "keywords": [
         "openapitools",
