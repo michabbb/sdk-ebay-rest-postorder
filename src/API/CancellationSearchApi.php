@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection UnknownInspectionInspection */
 /**
  * CancellationSearchApi
  * PHP version 7.4
@@ -27,18 +27,23 @@
 
 namespace macropage\SDKs\ebay\rest\postorder\API;
 
-use DateTime;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
+use GuzzleHttp\Utils;
+use InvalidArgumentException;
+use JsonException;
 use macropage\SDKs\ebay\rest\postorder\ApiException;
 use macropage\SDKs\ebay\rest\postorder\Configuration;
 use macropage\SDKs\ebay\rest\postorder\HeaderSelector;
+use macropage\SDKs\ebay\rest\postorder\Model\FindCancelResponse;
 use macropage\SDKs\ebay\rest\postorder\ObjectSerializer;
+use RuntimeException;
 
 /**
  * CancellationSearchApi Class Doc Comment
@@ -58,17 +63,17 @@ class CancellationSearchApi
     /**
      * @var Configuration
      */
-    protected $config;
+    protected Configuration $config;
 
     /**
      * @var HeaderSelector
      */
-    protected $headerSelector;
+    protected HeaderSelector $headerSelector;
 
     /**
      * @var int Host index
      */
-    protected $hostIndex;
+    protected int $hostIndex;
 
     /** @var string[] $contentTypes * */
     public const contentTypes = [
@@ -87,7 +92,7 @@ class CancellationSearchApi
         ClientInterface $client = null,
         Configuration   $config = null,
         HeaderSelector  $selector = null,
-                        $hostIndex = 0
+        int $hostIndex = 0
     )
     {
         $this->client         = $client ?: new Client();
@@ -101,7 +106,7 @@ class CancellationSearchApi
      *
      * @param int $hostIndex Host index (required)
      */
-    public function setHostIndex($hostIndex): void
+    public function setHostIndex(int $hostIndex): void
     {
         $this->hostIndex = $hostIndex;
     }
@@ -111,7 +116,7 @@ class CancellationSearchApi
      *
      * @return int Host index
      */
-    public function getHostIndex()
+    public function getHostIndex(): int
     {
         return $this->hostIndex;
     }
@@ -119,7 +124,7 @@ class CancellationSearchApi
     /**
      * @return Configuration
      */
-    public function getConfig()
+    public function getConfig(): Configuration
     {
         return $this->config;
     }
@@ -141,11 +146,11 @@ class CancellationSearchApi
      * @param string $transactionId transactionId (optional)
      * @param string $contentType The value for the Content-Type header. Check self::contentTypes['searchCancellations'] to see the possible values for this operation
      *
-     * @return \macropage\SDKs\ebay\rest\postorder\Model\FindCancelResponse
-     * @throws \macropage\SDKs\ebay\rest\postorder\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @return FindCancelResponse
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
      */
-    public function searchCancellations($cancelId = null, $creationDateRangeFrom = null, $creationDateRangeTo = null, $itemId = null, $legacyOrderId = null, $limit = null, $offset = null, $role = null, $sort = null, $transactionId = null, string $contentType = self::contentTypes['searchCancellations'][0])
+    public function searchCancellations($cancelId = null, $creationDateRangeFrom = null, $creationDateRangeTo = null, $itemId = null, $legacyOrderId = null, $limit = null, $offset = null, $role = null, $sort = null, $transactionId = null, string $contentType = self::contentTypes['searchCancellations'][0]): FindCancelResponse
     {
         list($response) = $this->searchCancellationsWithHttpInfo($cancelId, $creationDateRangeFrom, $creationDateRangeTo, $itemId, $legacyOrderId, $limit, $offset, $role, $sort, $transactionId, $contentType);
         return $response;
@@ -169,10 +174,10 @@ class CancellationSearchApi
      * @param string $contentType The value for the Content-Type header. Check self::contentTypes['searchCancellations'] to see the possible values for this operation
      *
      * @return array of \macropage\SDKs\ebay\rest\postorder\Model\FindCancelResponse, HTTP status code, HTTP response headers (array of strings)
-     * @throws \macropage\SDKs\ebay\rest\postorder\ApiException on non-2xx response or if the response body is not in the expected format
-     * @throws \InvalidArgumentException
+     * @throws ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws InvalidArgumentException
      */
-    public function searchCancellationsWithHttpInfo($cancelId = null, $creationDateRangeFrom = null, $creationDateRangeTo = null, $itemId = null, $legacyOrderId = null, $limit = null, $offset = null, $role = null, $sort = null, $transactionId = null, string $contentType = self::contentTypes['searchCancellations'][0])
+    public function searchCancellationsWithHttpInfo($cancelId = null, $creationDateRangeFrom = null, $creationDateRangeTo = null, $itemId = null, $legacyOrderId = null, $limit = null, $offset = null, $role = null, $sort = null, $transactionId = null, string $contentType = self::contentTypes['searchCancellations'][0]): array
     {
         $request = $this->searchCancellationsRequest($cancelId, $creationDateRangeFrom, $creationDateRangeTo, $itemId, $legacyOrderId, $limit, $offset, $role, $sort, $transactionId, $contentType);
 
@@ -220,7 +225,7 @@ class CancellationSearchApi
                         if ('\macropage\SDKs\ebay\rest\postorder\Model\FindCancelResponse' !== 'string') {
                             try {
                                 $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                            } catch (\JsonException $exception) {
+                            } catch (JsonException $exception) {
                                 throw new ApiException(
                                     sprintf(
                                         'Error JSON decoding server response (%s)',
@@ -249,7 +254,7 @@ class CancellationSearchApi
                 if ($returnType !== 'string') {
                     try {
                         $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-                    } catch (\JsonException $exception) {
+                    } catch (JsonException $exception) {
                         throw new ApiException(
                             sprintf(
                                 'Error JSON decoding server response (%s)',
@@ -301,10 +306,10 @@ class CancellationSearchApi
      * @param string $transactionId (optional)
      * @param string $contentType The value for the Content-Type header. Check self::contentTypes['searchCancellations'] to see the possible values for this operation
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     * @throws \InvalidArgumentException
+     * @return PromiseInterface
+     * @throws InvalidArgumentException
      */
-    public function searchCancellationsAsync($cancelId = null, $creationDateRangeFrom = null, $creationDateRangeTo = null, $itemId = null, $legacyOrderId = null, $limit = null, $offset = null, $role = null, $sort = null, $transactionId = null, string $contentType = self::contentTypes['searchCancellations'][0])
+    public function searchCancellationsAsync($cancelId = null, $creationDateRangeFrom = null, $creationDateRangeTo = null, $itemId = null, $legacyOrderId = null, $limit = null, $offset = null, $role = null, $sort = null, $transactionId = null, string $contentType = self::contentTypes['searchCancellations'][0]): PromiseInterface
     {
         return $this->searchCancellationsAsyncWithHttpInfo($cancelId, $creationDateRangeFrom, $creationDateRangeTo, $itemId, $legacyOrderId, $limit, $offset, $role, $sort, $transactionId, $contentType)
                     ->then(
@@ -331,10 +336,10 @@ class CancellationSearchApi
      * @param string $transactionId (optional)
      * @param string $contentType The value for the Content-Type header. Check self::contentTypes['searchCancellations'] to see the possible values for this operation
      *
-     * @return \GuzzleHttp\Promise\PromiseInterface
-     * @throws \InvalidArgumentException
+     * @return PromiseInterface
+     * @throws InvalidArgumentException
      */
-    public function searchCancellationsAsyncWithHttpInfo($cancelId = null, $creationDateRangeFrom = null, $creationDateRangeTo = null, $itemId = null, $legacyOrderId = null, $limit = null, $offset = null, $role = null, $sort = null, $transactionId = null, string $contentType = self::contentTypes['searchCancellations'][0])
+    public function searchCancellationsAsyncWithHttpInfo($cancelId = null, $creationDateRangeFrom = null, $creationDateRangeTo = null, $itemId = null, $legacyOrderId = null, $limit = null, $offset = null, $role = null, $sort = null, $transactionId = null, string $contentType = self::contentTypes['searchCancellations'][0]): PromiseInterface
     {
         $returnType = '\macropage\SDKs\ebay\rest\postorder\Model\FindCancelResponse';
         $request    = $this->searchCancellationsRequest($cancelId, $creationDateRangeFrom, $creationDateRangeTo, $itemId, $legacyOrderId, $limit, $offset, $role, $sort, $transactionId, $contentType);
@@ -390,14 +395,15 @@ class CancellationSearchApi
      * @param string $transactionId (optional)
      * @param string $contentType The value for the Content-Type header. Check self::contentTypes['searchCancellations'] to see the possible values for this operation
      *
-     * @return \GuzzleHttp\Psr7\Request
-     * @throws \InvalidArgumentException
+     * @return Request
+     * @throws InvalidArgumentException
+     * @noinspection ClassConstantCanBeUsedInspection
      */
-    public function searchCancellationsRequest($cancelId = null, $creationDateRangeFrom = null, $creationDateRangeTo = null, $itemId = null, $legacyOrderId = null, $limit = null, $offset = null, $role = null, $sort = null, $transactionId = null, string $contentType = self::contentTypes['searchCancellations'][0])
+    public function searchCancellationsRequest($cancelId = null, $creationDateRangeFrom = null, $creationDateRangeTo = null, $itemId = null, $legacyOrderId = null, $limit = null, $offset = null, $role = null, $sort = null, $transactionId = null, string $contentType = self::contentTypes['searchCancellations'][0]): Request
     {
         // verify the required parameter 'xEBAYCMARKETPLACEID' is set
         if (empty($this->config->getMarketplaceId())) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Missing the required parameter in header X-EBAY-C-MARKETPLACE-ID'
             );
         }
@@ -422,7 +428,7 @@ class CancellationSearchApi
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $creationDateRangeFrom,
             'creation_date_range_from', // param base name
-            DateTime::class,            // openApiType
+            '\\DateTime',               // openApiType
             'form',                     // style
             true,                       // explode
             false                       // required
@@ -431,7 +437,7 @@ class CancellationSearchApi
         $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
             $creationDateRangeTo,
             'creation_date_range_to', // param base name
-            DateTime::class,          // openApiType
+            '\\DateTime',             // openApiType
             'form',                   // style
             true,                     // explode
             false                     // required
@@ -525,7 +531,7 @@ class CancellationSearchApi
 
             } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
                 # if Content-Type contains "application/json", json_encode the form parameters
-                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+                $httpBody = Utils::jsonEncode($formParams);
             } else {
                 // for HTTP post (form)
                 $httpBody = ObjectSerializer::buildQuery($formParams);
@@ -563,15 +569,15 @@ class CancellationSearchApi
      * Create http client option
      *
      * @return array of http client options
-     * @throws \RuntimeException on file opening failure
+     * @throws RuntimeException on file opening failure
      */
-    protected function createHttpClientOption()
+    protected function createHttpClientOption(): array
     {
         $options = [];
         if ($this->config->getDebug()) {
             $options[RequestOptions::DEBUG] = fopen($this->config->getDebugFile(), 'a');
             if (!$options[RequestOptions::DEBUG]) {
-                throw new \RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
+                throw new RuntimeException('Failed to open the debug file: ' . $this->config->getDebugFile());
             }
         }
 
