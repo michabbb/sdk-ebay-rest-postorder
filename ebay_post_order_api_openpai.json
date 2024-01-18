@@ -1,0 +1,307 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "eBay Cancellation Search API",
+    "description": "API for searching eBay order cancellations.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.ebay.com/post-order/v2",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/cancellation/search": {
+      "get": {
+        "tags": [
+          "Cancellation Search"
+        ],
+        "summary": "Search for order cancellations",
+        "operationId": "searchCancellations",
+        "parameters": [
+          {
+            "name": "cancel_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "creation_date_range_from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "creation_date_range_to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "item_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "legacy_order_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "transaction_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FindCancelResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "FindCancelResponse": {
+        "type": "object",
+        "properties": {
+          "cancellations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CancelSummary"
+            }
+          },
+          "paginationOutput": {
+            "$ref": "#/components/schemas/PaginationOutput"
+          },
+          "total": {
+            "type": "integer"
+          }
+        }
+      },
+      "CancelSummary": {
+        "type": "object",
+        "properties": {
+          "buyerLoginName": {
+            "type": "string"
+          },
+          "buyerResponseDueDate": {
+            "$ref": "#/components/schemas/DateTime"
+          },
+          "cancelCloseDate": {
+            "$ref": "#/components/schemas/DateTime"
+          },
+          "cancelCloseReason": {
+            "type": "string"
+          },
+          "cancelId": {
+            "type": "string"
+          },
+          "cancelReason": {
+            "type": "string"
+          },
+          "cancelRequestDate": {
+            "$ref": "#/components/schemas/DateTime"
+          },
+          "cancelState": {
+            "type": "string"
+          },
+          "lineItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LineItem"
+            }
+          },
+          "lastModifiedDate": {
+            "$ref": "#/components/schemas/DateTime"
+          },
+          "cancelStatus": {
+            "type": "string"
+          },
+          "legacyOrderId": {
+            "type": "string"
+          },
+          "marketplaceId": {
+            "type": "string"
+          },
+          "partialOrderType": {
+            "type": "string"
+          },
+          "paymentStatus": {
+            "type": "string"
+          },
+          "payoutRecoupInfo": {
+            "$ref": "#/components/schemas/PayoutRecoupInfo"
+          },
+          "requestorType": {
+            "type": "string"
+          },
+          "requestRefundAmount": {
+            "$ref": "#/components/schemas/Amount"
+          },
+          "sellerLoginName": {
+            "type": "string"
+          },
+          "sellerResponseDueDate": {
+            "$ref": "#/components/schemas/DateTime"
+          },
+          "shipmentDate": {
+            "$ref": "#/components/schemas/DateTime"
+          }
+        }
+      },
+      "LineItem": {
+        "type": "object",
+        "properties": {
+          "itemId": {
+            "type": "string"
+          },
+          "transactionId": {
+            "type": "string"
+          },
+          "itemTitle": {
+            "type": "string"
+          },
+          "cancelQuantity": {
+            "type": "integer"
+          },
+          "relistEligibilityCodeEnum": {
+            "type": "string"
+          },
+          "relistedItemId": {
+            "type": "integer"
+          }
+        }
+      },
+      "DateTime": {
+        "type": "object",
+        "properties": {
+          "formattedValue": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PayoutRecoupInfo": {
+        "type": "object",
+        "properties": {
+          "amountToRecoup": {
+            "$ref": "#/components/schemas/Amount"
+          },
+          "payoutId": {
+            "type": "integer"
+          }
+        }
+      },
+      "Amount": {
+        "type": "object",
+        "properties": {
+          "convertedFromCurrency": {
+            "type": "string"
+          },
+          "convertedFromValue": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "exchangeRate": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          }
+        }
+      },
+      "PaginationOutput": {
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer"
+          },
+          "offset": {
+            "type": "integer"
+          },
+          "totalEntries": {
+            "type": "integer"
+          },
+          "totalPages": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "description": "Authentifizierung erforderlich. Benutze diesen Header mit dem Format 'TOKEN xxxxxxxx'."
+      }
+    }
+  },
+  "security": [
+    {
+      "TokenAuth": []
+    }
+  ]
+}

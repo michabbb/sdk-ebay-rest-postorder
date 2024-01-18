@@ -1,0 +1,14 @@
+{
+  "packageName": "sdk-ebay-rest-postorder",
+  "composerVendorName": "macropage",
+  "composerProjectName": "sdk-ebay-rest-postorder",
+  "artifactVersion": "1.9.0",
+  "invokerPackage": "macropage\\SDKs\\ebay\\rest\\postorder",
+  "modelPackage": "Model",
+  "apiPackage": "API",
+  "variableNamingConvention": "camelCase",
+  "srcBasePath": "src",
+  "gitUserId": "macropage",
+  "gitRepoId": "sdk-ebay-rest-postorder",
+  "validateSpec": false
+}
