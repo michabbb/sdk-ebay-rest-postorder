@@ -37,7 +37,7 @@ Then run `composer install`
 
 OR
 
-`composer install macropage/sdk-ebay-rest-postorder`
+`composer require macropage/sdk-ebay-rest-postorder`
 
 ### Manual Installation
 
